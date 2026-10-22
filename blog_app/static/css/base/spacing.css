@@ -1,0 +1,43 @@
+.padding_tb-s {
+    padding: var(--offset-s) 0;
+}
+.padding-2xs {
+    padding: var(--offset-2xs);
+}
+
+.margin_rl-3xs {
+    margin: 0 var(--offset-3xs);
+}
+
+.margin_r-3xs {
+    margin-right: var(--offset-3xs);
+}
+
+.margin_l-3xs {
+    margin-left: var(--offset-3xs);
+}
+
+.margin_l-xs {
+    margin-left: var(--offset-3xs);
+}
+
+
+
+.margin_b-3xs {
+    margin-bottom: var(--offset-3xs);
+}
+
+.margin_t-3xs {
+    margin-top: var(--offset-3xs);
+}
+.padding-s {
+    padding: var(--offset-s)
+}
+
+.margin_t-xs {
+    margin-top: var(--offset-xs);
+}
+
+.margin_b-xs {
+    margin-bottom: var(--offset-xs);
+}

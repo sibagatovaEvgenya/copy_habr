@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if not entities %}
+<div class="home_empty-articles content-block 
+            paddind-2xs flex flex-center full-size"
+>
+    <span class="font-2xl">Нет статей</span>
+</div>
+{% else %}
+    {% for article in entities %}
+    <article class="content-block padding-s margin_t-3xs">
+        <div class="margin_b-3xs flex flex-js-sb">
+            <a href="{% url 'article-user' article.user.id %}" class="simple-link">
+                {{ article.user }}
+            </a>
+            <a href="{% url 'article-category' article.category.id %}" class="simple-link">
+                {{ article.category }}
+            </a>
+        </div>
+        <h2>{{ article.title }}</h2>
+        <p class="margin_t-xs">{{ article.limit_content }}</p>
+        <div class="margin_t-xs">
+            <a href="{% url 'article-view' article.id %}" class="button-link">
+                Читать далее
+            </a>
+        </div>
+    </article>
+    {% endfor %}
+
+{% endif %}
+{% endblock %}

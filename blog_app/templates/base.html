@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>HabrCopy
+    {% if title %}
+        | {{ title }}
+    {% endif %}
+    </title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% block custom_css %}
+    {% endblock %}
+    {% block custom_js %}
+    {% endblock %}
+    {% csrf_token %}
+</head>
+<body class="full-screen overflow-hidden flex flex-column">
+    <header class="full-width flex flex-jc-center">
+        <div class="content-wrapper flex-js-sb full-height flex flex-ai-center">
+            <div class="header-logo padding_tb-s full-height flex flex-ai-center">
+                <a href="{% url 'home' %}">
+                    <h1>Хабр</h1>
+                </a>
+                <div class="v-delimiter margin_rl-3xs full-height"></div>
+                <a class="simple-link" href="{% url 'category-list' %}">
+                    Все категории
+                </a>
+            </div>
+            <div id="search-block" class="search-block">
+                <input type="text" name="searchStr">
+                <button type="reset" id="searchClose">
+                    <i class="fa fa-xmark"></i>
+                </button>
+            </div>
+            <div id="header-buttons" class="header-buttons">
+                {% if request.user.is_authenticated %}
+                <a class="icon-link margin_r-3xs" href="{% url 'article-user' request.user.id %}" title="Мои статьи">
+                    <i class="fa-solid fa-newspaper"></i>
+                </a>
+                <a class="icon-link margin_r-3xs" href="{% url 'article-add' %}" title="Создать статью">
+                    <i class="fa-solid fa-pen"></i>
+                </a>
+                {% endif %}
+                <a class="icon-link margin_r-3xs" href="" title="Поиск по статьям">
+                    <i class="fa-solid fa-search"></i>
+                </a>
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="margin_r-3xs button-link">
+                    Выйти
+                </a>
+                {% else %}
+                <a href="{% url 'login' %}" class="margin_r-3xs button-link">
+                    Войти
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    <div class="full-size flex flex-jc-center overflow-auto">
+        <div class="content-wrapper flex flex-js-sb">
+            <main class="flex flex-column">
+            {% block content %}
+            {% endblock %}
+            </main>
+            {% if popular_articles %}
+            <nav class="content-block margin_l-xs fit-height">
+                <h2 class="paddind-2xs">Популярные статьи</h2>
+                <hr>
+
+                {% for article in popular_articles %}
+                <article class="padding-2xs">
+                    <a 
+                    href="{% url 'article-view' article.id %}"
+                    class="simple-link"
+                    >
+                    {{ article.title }}
+
+                    </a>
+                </article>
+                {% endfor %}
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+    <script src="{% static 'js/index.js' %}"></script>
+</body>
+</html>

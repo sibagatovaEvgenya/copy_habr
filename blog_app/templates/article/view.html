@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
+<link rel="stylesheet" href="{% static 'css/article_view.css' %}">
+
+{% endblock %}
+
+{% block custom_js %}
+{% if not request.user.is_authenticated %}
+
+<script src="{% static 'js/articleView.js' %}"></script>
+{% endif %}
+<script src="{% static 'js/reaction.js'%}"></script>
+{% endblock %}
+
+{% block content %}
+<input type="hidden" id="article_id" value="{{ article.id }}">
+
+<article class="content-block padding-s margin_t-3xs">
+    
+
+       
+    <div class="margin_b-xs flex flex-js-sb">
+        <a href="{% url 'article-user' article.user.id %}" class="simple-link">
+                {{ article.user }}
+        </a>
+        <a href="{% url 'article-category' article.category.id %}" class="simple-link">
+                {{ article.category }}
+        </a>
+    </div>
+    <h2 class="margin_b-xs">{{ article.title }}</h2>
+    {% if request.user.id == article.user.id %}
+    <div>
+        <a href="{% url 'article-update' article.id  %}" class="icon-link margin_l-3xs">
+            <i class="fa fa-pen font-s color-base"></i>
+            Редактировать
+        </a>
+        <a href="{% url 'article-delete' article.id  %}" class="icon-link margin_l-3xs">
+            <i class="fa fa-trash font-s color-danger"></i>
+            Удалить
+        </a>
+    </div>
+    
+    {% endif %}
+    <p class="margin_t-xs">{{ article.formated_content|safe }}</p>
+    <hr class="margin_t-xs">
+    <div class="extra-block margin_t-xs font-m flex flex-js-sb">
+        <div class="font-m">
+            <i class="fa fa-thumbs-up font-m reaction-btn 
+            {% if request.user.is_authenticated %}
+            reaction-btn-active
+            {% endif %}
+            {% if reaction.is_my_like%}
+                reaction-set
+            {% endif %}
+            "
+            data-entity="article"
+            data-id="{{ article.id }}"
+            data-operation="like"
+            onclick="setReaction()"
+            ></i>
+            <span data-type="like">
+                {{ reaction.likes }}
+            </span>
+            
+        </div>
+        <div class="font-m">
+            <i class="fa fa-thumbs-down font-m reaction-btn 
+            {% if request.user.is_authenticated %}
+            reaction-btn-active
+            {% endif %}
+            {% if reaction.is_my_dislike %}
+                reaction-set
+            {% endif %}
+            "
+            data-entity="article"
+            data-id="{{ article.id }}"
+            data-operation="dislike"
+            onclick="setReaction()"
+            ></i>
+            <span data-type="dislike">
+                {{ reaction.dislikes }}
+            </span>
+            
+        </div>
+        <div class="font-m">
+            <i class="fa fa-eye font-m"></i>
+            {{ views_count }}
+        </div>
+        <div class="font-m">
+            <i class="fa fa-comment font-m"></i>
+            {{ comments_count }}
+        </div>
+
+    </div>
+</article>
+<div class="content-block padding-s margin_t-3xs">
+    {% if request.user.is_authenticated %}
+    <div class="comment-form form-container">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <textarea class="padding-2xs" rows="10" placeholder="Введите ваш комментарий" name="content" id="content"></textarea>
+            <button class="button-link margin_t-3xs" type="submit">Отправить</button>
+        </form>
+    </div>
+    <hr class="margin_b-xs">
+    {% endif %}
+    <div class="flex flex-center flex-column">
+        {% if not comments %}
+        Нет комментариев
+        {% else %}
+        {% for comment in comments %}
+        <div class="comment margin_b-xs padding-s full-width">
+
+            <div class="margin_b-xs padding-xs full-width">
+                <a href="{% url 'article-user' article.user.id %}" class="simple-link">
+                    <span data-type="like">
+                        {{ comment.user.username }}
+                    </span>
+                    
+                </a>
+
+            </div>
+            <span class="margin_b-xs">{{ comment.content }}</span>
+            <hr class="margin_b-xs margin_t-xs">
+            <div class="flex">
+                <div class="font-s">
+                    <i class="fa fa-thumbs-up font-s
+                     {% if request.user.is_authenticated %}
+                        reaction-btn-active
+                    {% endif %}
+                    {% if reaction.is_my_dislike %}
+                        reaction-set
+                    {% endif %}
+                        "
+                        data-entity="comment"
+                        data-id="{{ comment.id }}"
+                        data-operation="like"
+                        onclick="setReaction()"                        
+                        ></i>
+                    {{ comment.reaction.likes }}
+                </div>
+                <div class="font-s margin_l-xs">
+                    <i class="fa fa-thumbs-down font-s
+                    {% if request.user.is_authenticated %}
+                        reaction-btn-active
+                    {% endif %}
+                    {% if reaction.is_my_dislike %}
+                        reaction-set
+                    {% endif %}
+                        "
+                        data-entity="comment"
+                        data-id="{{ comment.id }}"
+                        data-operation="dislike"
+                        onclick="setReaction()"                        
+                        ></i>
+                    <span data-type="dislike">
+                        {{ comment.reaction.dislikes }}
+                    </span>
+                    
+                </div>
+            </div>
+            
+
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

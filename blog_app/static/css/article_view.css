@@ -1,0 +1,37 @@
+.comment-form textarea {
+    min-width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+.comment div a {
+        float:right;
+    }
+
+.comment {
+        background-color: var(--main-bg-color);
+    }       
+
+.reaction-btn {
+    color: gray;
+    transition: 0.3s;
+}
+
+.reaction-btn-active {
+    color: black;
+    cursor: pointer;
+}
+
+
+
+.reaction-set[data-operation="dislike"], .reaction-btn-active[data-operation="dislike"]:hover{
+    color: red;
+}
+
+.reaction-set[data-operation="like"], .reaction-btn-active[data-operation="like"]:hover{
+    color: green;
+}
+
+.reaction-set[data-operation="dislike"]:hover, .reaction-set[data-operation="like"]:hover{
+    color: black;
+}

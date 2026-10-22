@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block custom_css %}
+<link 
+    rel="stylesheet"
+    href="{% static 'css/form.css' %}"
+>
+{% endblock %}
+
+{% block custom_js %}
+{% for js in additional_js %}
+<script src="/static/js/{{js}}.js"></script>
+{% endfor %}
+{% endblock %}
+
+{% block content %}
+<h1 class="padding_tb-s">{{ page_title }}</h1>
+<div class="form-container
+            flex flex-center full-size"
+>
+    <div class="flex flex-column">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="button-link" type="submit">
+            {{ btn_text }}
+        </button>
+    </form>
+    {% if additional_text %}
+        <div class="additional-continer paddind-2xs">
+            {{ additional_text }}
+            {% if additional_link %}
+            <a
+                class="simple-link"
+                href="{{ additional_link }}"
+            >
+                {{ link_text }}
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

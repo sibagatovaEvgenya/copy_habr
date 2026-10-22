@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="flex flex-ai-center">
+        <h1 class="padding_tb-s">Все категории</h1>
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'category-add' %}" class="circle-btn margin_l-3xs">
+            <i class="fa fa-plus"></i>
+        </a>
+        {% endif %}
+    </div>
+    {% if not entities %}
+    <div class="article_list-empty content-block 
+            paddind-2xs flex flex-center full-size"
+    >
+        <span class="font-2xl">Нет категорий</span>
+    </div>
+    {% else %}
+        {% for category in entities %}
+            <div class="content-block paddind-2xs margin_b-3xs">
+                <div class="category-header flex flex-ai-center">
+                    <i class="fa {{ category.icon }} margin_r-3xs"></i>
+                    <h3>{{ category.name }}</h3>
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'category-update' category.id  %}" class="icon-link margin_l-3xs">
+                        <i class="fa fa-pen font-s color-base"></i>
+                    </a>
+                    <a href="{% url 'category-delete' category.id  %}" class="icon-link margin_l-3xs">
+                        <i class="fa fa-trash font-s color-danger"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
